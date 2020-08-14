@@ -20,6 +20,6 @@ app.use('/user', userRouter )
 app.use('/team-users', teamOPRouter)
 app.use('/task', taskRouter)
 app.use('/location', locationRouter)
-const port = 8888
+const port = 5001
 app.listen(port, '0.0.0.0')
 module.exports = app;
