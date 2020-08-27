@@ -22,7 +22,7 @@ exports.assignTask = (task_id, username) => {
 
 exports.deleteUserFromTask = (taskID, username) => {
     return new Promise((resolve, reject) => {
-        connection.query(`DELETE FROM user_task 
+        connection.query(`DELETE FROM user_task
                                 WHERE task_id = ?
                                 AND username = ?`, [taskID, username],(err, result) =>{
             if (err) reject(err)
@@ -32,7 +32,8 @@ exports.deleteUserFromTask = (taskID, username) => {
 }
 exports.changeTaskStatus = (task_id, status) => {
     return new Promise((resolve, reject) => {
-        connection.query("UPDATE task SET status = ? WHERE task_id = ? ", [], (err, result) => {
+        connection.query("UPDATE task SET status = ? WHERE task_id = ? ",
+         [status, task_id], (err, result) => {
             if (err) reject(err)
             resolve(result)
         })
@@ -90,8 +91,8 @@ exports.getAssignedUsersForTask = (task_id) => {
     return new Promise((resolve, reject) => {
         connection.query(`SELECT *
                                 FROM users
-                                WHERE username IN 
-                               (SELECT username 
+                                WHERE username IN
+                               (SELECT username
                                 from user_task WHERE task_id=?)`,[task_id],(err, result) => {
             if (err) reject(err)
             resolve(result)
@@ -113,9 +114,9 @@ exports.deleteTasksAfterLeavingTeam = (username, teamname) => {
     return new Promise((resolve, reject) => {
         connection.query(`DELETE user_task
                                 FROM user_task
-                                LEFT JOIN task t 
+                                LEFT JOIN task t
                                 ON user_task.task_id = t.task_id
-                                WHERE team_name= ? AND 
+                                WHERE team_name= ? AND
                                       username = ?`,
                         [teamname, username],(err, result) => {
             if (err) reject(err)
@@ -128,8 +129,8 @@ exports.getPossibleUsersToAddForTask = (username, taskID) => {
     return new Promise((resolve, reject) => {
         connection.query(`SELECT * FROM users WHERE username NOT IN(
         SELECT username FROM user_task WHERE task_id = ?
-    ) AND username != ? 
-        AND username IN 
+    ) AND username != ?
+        AND username IN
         (SELECT username FROM user_team WHERE user_status='accepted')`,[taskID, username], (err, result) => {
             if(err) reject(err)
             resolve(result)
@@ -147,7 +148,7 @@ exports.submitReport = (username, taskID, report) => {
 }
 exports.getReports = (taskID) => {
     return new Promise((resolve, reject) => {
-        connection.query(`SELECT * FROM task_reports 
+        connection.query(`SELECT * FROM task_reports
                                 LEFT JOIN users u on task_reports.author = u.username
                                 WHERE task_id=?`,[taskID], (err, result) => {
             if (err) reject(err)
