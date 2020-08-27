@@ -42,6 +42,7 @@ router.put("/status/:taskID/", tokenAuth, async (req, res) => {
 
     try {
         await taskOperations.changeTaskStatus(taskID, status)
+        res.send("done")
     } catch (e) {
         res.status(400)
         res.send({error: e})
